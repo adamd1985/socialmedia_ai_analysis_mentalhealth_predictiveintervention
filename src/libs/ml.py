@@ -6,18 +6,18 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import KFold
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 import pandas as pd
-import content
 
-print("""USAGE:
-get data as:
-[['text', 'class']]
+from . import readability, content
 
-pipeline = bagOfWords()
-pipeline = evaluate(pipeline, data=data)
-""")
 
 def getData(df1, df2):
-    import readability
+    """USAGE:
+    get data as:
+    [['text', 'class']]
+
+    pipeline = bagOfWords()
+    pipeline = evaluate(pipeline, data=data)
+    """
     df1 = readability.prepare(df1)
     df2 = readability.prepare(df2)
 

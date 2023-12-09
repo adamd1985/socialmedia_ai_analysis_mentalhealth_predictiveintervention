@@ -3,14 +3,14 @@ import numpy as np
 import itertools
 import pickle
 import os
-import content
+import argparse
+
+from libs import ml, content
 
 subreddits = ['./data/suicidewatch-sample', './data/depression-sample']
 subreddits.sort()
 
-def main(ngram_range=(1, 2)):
-    import ml
-    import numpy as np
+def create_kfolds(ngram_range=(1, 2)):
     fname = "./data/combinations-10fold.pkl"
     combinations = list(itertools.combinations(subreddits, 2))
 
@@ -65,7 +65,7 @@ def main(ngram_range=(1, 2)):
         print("finished", combination)
 
 
-def readResults(deviations=False):
+def read_results(deviations=False):
     df = pd.read_pickle("./data/combinations-10fold.pkl")
     df = pd.DataFrame(df)
     for column in df.columns:
@@ -78,6 +78,21 @@ def readResults(deviations=False):
             else:
                 df[column][index] = np.mean(tmp)
     return df
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Process command line arguments')
+    parser.add_argument(
+        '--action', choices=['create', 'read'], help='Specify action: --create or --read', default='read')
+    args = parser.parse_args()
+
+    if args.action == 'create':
+        create_kfolds()
+    elif args.action == 'read':
+        print(read_results())
+    else:
+        print("Invalid action. Use --create or --read.")
 
 
 if __name__ == "__main__":
